@@ -1,12 +1,5 @@
 import React from 'react';
-import './styles.css'
-
-//export const Message = ({ text, mystring, onMessageClick }) => {
-//    return (
-//    <h3 className="header" onClick={onMessageClick}>
- //   Message Text, {text}</h3>
- //   );
-//};
+import './styles.css';
 
 export class Message extends React.Component {
     tender() {
@@ -19,8 +12,3 @@ export class Message extends React.Component {
     }
 }
 
-//const foo = () => {
- //   console.log("0-0-0-0-0");
-//};
-
-//export default foo;

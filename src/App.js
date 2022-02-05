@@ -1,41 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
-//import React from 'react';
-import { Message } from './components/Message';
-//import Counter from './components/Counter';
 
-const myText = "Hello from app"
+import React, { useState } from "react";
+//import logo from './logo.svg';
+import './App.css';
+import { Message } from './components/Message';
+//import { Counter } from './components/Counter';
+import { Form } from "./components/Form";
+import { useEffect } from "react/cjs/react.development";
+import { AUTHORS } from "./utils/constants";
+
 
 
 function App() {
-
+  const [messageList, setMessageList] = useState([
+    { text: "msg1", author: AUTHORS.ME },
+    { text: "i am bot", author: AUTHORS.BOT }
+  ]);
   const handleMessageClick = () => {
     console.log('hello!!!')
-  }
+  };
 
+  const handleAddMessage = (text) => {
+    const newMessage = {
+      text,
+      author: AUTHORS.ME,
+    }
+    setMessageList((prevMessageList) => [...prevMessageList, newMessage]);
+  };
+
+  useEffect(() => {
+    let timeout;
+    if (messageList[messageList.length - 1].author === AUTHORS.ME) {
+      timeout = setTimeout(() => {
+        const newMessage = {
+          text: 'hi, i am',
+          author: AUTHORS.BOT,
+      };
+      setMessageList((prevMessageList) => [...prevMessageList, newMessage]);
+     }, 1000);  
+    }
+    return () => {
+     clearTimeout(timeout);
+    }    
+  }, [messageList]);
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <Message 
-        myString="my string" 
-        text={myText} 
-        onMessageClick={handleMessageClick} 
-        />
-        <Counter />
-      </header>
+      <div className="App-header">
+        {messageList.map((message) => (
+          <Message text={message.text} 
+          author={message.author}
+          onMessageClick={handleMessageClick} 
+          />
+        ))}
+      </div>
+      <Form onSubmit={handleAddMessage} />
     </div>
   );
 }

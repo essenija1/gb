@@ -1,7 +1,9 @@
-import { Form } from "react";
+import { Form, useEffect } from "react";
 
 export const Form = ({ onSubmit }) => {
     const [value, setValue] = useState('');
+    const textField = useRef();
+
 
     const handleChange = (e) => {
       setValue(e.target.value);
@@ -12,10 +14,20 @@ export const Form = ({ onSubmit }) => {
        onSubmit(value);
        setValue('');
    }
+     
+   useEffect(() => {
+      textField.current?.focus();
+   }, []);
+
 
     return (
     <form onSubmit={handleSubmit}>
-      <input value={value} onChange={handleChange} type="text" />
+      <input 
+      value={value} 
+      ref={textField}
+      onChange={handleChange} 
+      type="text" 
+      />
       <input type="submit" />
     </form>
     );

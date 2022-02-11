@@ -1,4 +1,4 @@
-import { Form, useEffect } from "react";
+import { useEffect } from "react";
 
 export const Form = ({ onSubmit }) => {
     const [value, setValue] = useState('');

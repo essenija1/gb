@@ -12,6 +12,7 @@ export const Message = ({ text, author }) => {
     );
 };
 
+
 Message.propTypes = {
     text: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.number]),
     author: PropTypes.string.isRequired,

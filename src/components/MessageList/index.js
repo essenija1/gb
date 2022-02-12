@@ -8,3 +8,4 @@ export const MessageList = ({ messages }) => {
         </div>
     ));
 }
+

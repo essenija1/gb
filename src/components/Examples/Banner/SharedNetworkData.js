@@ -5,3 +5,4 @@ export const SharedNetworkData = ({ render }) => {
 
     return render(isConnected);
 };
+

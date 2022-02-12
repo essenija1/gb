@@ -53,6 +53,7 @@ export function Chat() {
         return () => clearTimeout(timeout);
     }, [messageList]);
 
+    
     useEffect(() => {
         console.log(messageEnd);
     }, []);

@@ -12,7 +12,7 @@ const messages = {
     chat1: [],
 }
 
-export function Chat() {
+export function Chat({ messageColor }) {
     const params = useParams();
     const { chatId } = params;
 
@@ -45,18 +45,25 @@ export function Chat() {
         messageEnd.current?.scrollIntoView();
 
         let timeout;
-        if (messageList[chatId]?.[messageList[chatId]?.length - 1]?.author === AUTHORS.ME) {
+        if (messageList[chatId]?.[messageList[chatId]?.length - 1]?.author === 
+            AUTHORS.ME
+            ) {
+            
+            
             timeout = setTimeout(() => {
                 sendMessage('hi, i am', AUTHORS.BOT);
             }, 1000);
         }
+
+
+
         return () => clearTimeout(timeout);
     }, [messageList]);
 
     
-    useEffect(() => {
-        console.log(messageEnd);
-    }, []);
+    // useEffect(() => {
+    //     console.log(messageEnd);
+    // }, []);
 
 
 if (!messageList[chatId]) {
@@ -70,7 +77,7 @@ if (!messageList[chatId]) {
                 <div className="App-content">
                     <MessageList messages={messageList[chatId]} />
                 </div>
-                <FormMui onSubmit={handleAddMessage} />
+                <FormWithLogger onSubmit={handleAddMessage} />
             </div>
         </div>
     );

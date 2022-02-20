@@ -2,7 +2,7 @@ import { CHANGE_NAME, CHANGE_SHOW_NAME } from './actions'
 
 const initialState = {
     name: 'Default',
-    showName: false,
+    showName: true,
 }
 
 export const profileReducer = (state = initialState, action) => {

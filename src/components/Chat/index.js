@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AUTHORS } from "./utils/constants";
 import { MessageList } from '../MessageList';
-import { FormMui } from "../FormMui";
+import { FormMui, FormWithLogger } from "../FormMui";
 import { ChatList } from "../ChatList";
 import { Navigate, useParams } from "react-router";
 import '../../App.css';
+import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { selectMessages } from "../../store/messages/selector";
 
+export function Chat() {
+    const { chatId } = useParams();
 
-// const chats = [{ id: 'chat1' }];
-// const messages = {
-//     chat1: [],
-// }
-
-export function Chat({ messages, addMessage }) {
-    const params = useParams();
-    // const navigate = useNavigate();
-    const { chatId } = params;
+    const messages = useSelector(selectMessages);
+    const dispatch = useDispatch();
 
     const messageEnd = useRef();
 
@@ -29,17 +27,17 @@ export function Chat({ messages, addMessage }) {
             author,
             id: `msg-${Date.now()}`,
         }
-        addMessage(chatId, newMsg);
+        dispatch(addMessage(chatId, newMsg));
     };
 
     useEffect(() => {
         messageEnd.current?.scrollIntoView();
 
         let timeout;
-        if (messages[chatId]?.[messages[chatId]?.length - 1]?.author === 
+        if (messages[chatId]?.[messages[chatId]?.length - 1]?.author ===
             AUTHORS.ME
-            ) {
-               
+        ) {
+
             timeout = setTimeout(() => {
                 sendMessage('hi, i am', AUTHORS.BOT);
             }, 1000);
@@ -50,15 +48,11 @@ export function Chat({ messages, addMessage }) {
         return () => clearTimeout(timeout);
     }, [messages]);
 
-    
-    // useEffect(() => {
-    //     console.log(messageEnd);
-    // }, []);
 
 
-if (!messages[chatId]) {
-   return <Navigate to="/chats" replace />
-}
+    if (!messages[chatId]) {
+        return <Navigate to="/chats" replace />
+    }
 
     return (
         <div className="App">
@@ -67,11 +61,17 @@ if (!messages[chatId]) {
                 <div className="App-content">
                     <MessageList messages={messages[chatId]} />
                 </div>
-                <FormWithLogger onSubmit={handleAddMessage} />
+                <FormWithLogger messageColor="yellow" onSubmit={handleAddMessage} />
             </div>
         </div>
     );
 }
 
-
-  
+function middleware(store) {
+    return function(next) {
+        return function(action) {
+            // .....
+         return next(action);
+        };
+    };
+}

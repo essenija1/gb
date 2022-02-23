@@ -1,51 +1,46 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter, Routes, Route, Link, NavLink } from "react-router-dom";
-import { addChat, deleteChat } from "../../store/chats/actions";
+import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import { onAuthStateChanged } from 'firebase/auth';
+
 import { ThemeContext } from "@emotion/react";
+import { Articles } from "../Articles/Articles";
 import { Chat } from "../Chat";
 import { ChatList } from "../ChatList";
-import ConnectedProfile, { Profile } from "../Profile";
-
-
+import { Home } from "../Home/Home";
+import { PrivateRoute } from "../PrivateRoute/PrivateRoute";
+import ConnectedProfile from "../Profile";
+import { PublicRoute } from "../PublicRoute/PublicRoute";
 
 const Home = () => <h2>Home page</h2>;
 
-// const initialChats = [
-//     {
-//         name: 'Chat 1',
-//         id: 'chat1',
-//     },
-//     {
-//         name: 'Chat 2',
-//         id: 'chat2',
-//     },
-//     {
-//         name: 'Chat 3',
-//         id: 'chat3',
-//     },
-// ];
-
-// const initialMessage = initialChats.reduce((acc, el) => {
-//     acc[el.id] = [];
-//     return acc;
-// }, {});
 
 export const Router = () => {
     const [messageColor, setMessageColor] = useState('red');
-    const messages = useSelector(selectMessage);
-
-   const chatList = useSelector(selectChats) ;
-   const dispatch = useDispatch();
-
-    const handleAddMessage = (chatId, newMsg) => {
-     dispatch(addMessage(chatId, newMsg));
-   };
+    const [authed, setAuthed] = useState(false);
+    const authorize = () => {
+        setAuthed(true);
+    };
+    const unauthorize = () => {
+        setAuthed(false);
+    };
    
     const contextValue = {
        messageColor,
        setMessageColor,
     };
+    
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          if (user) {
+              setAuthed(true);
+          } else {
+              setAuthed(false);
+          }
+        });
+
+        return unsubscribe;
+    }, []);
+
 
     return (
         <ThemeContext.Provider value={contextValue}>
@@ -65,21 +60,36 @@ export const Router = () => {
                     profile
                     </NavLink>
             </div>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/profile" element={<ConnectedProfile />} />
-                <Route path="chats" element={
-                <ChatList 
-                />
-                }
+            <div>
+                <NavLink
+                style={({isActive}) => ({color: isActive ? 'green' : 'grey'})}
+                to="/chats"
                 >
+                    chats
+                    </NavLink>
+            </div>
+            <div>
+                <NavLink
+                style={({isActive}) => ({color: isActive ? 'green' : 'grey'})}
+                to="/articles"
+                >
+                    articles
+                    </NavLink>
+            </div>
+            <Routes>
+                <Route path="/" element={<PublicRoute authed={authed} />}>
+                  <Route path="" element={<Home />} />
+                  <Route path="/signup" element={<Home isSignUp />} />
+                </Route>
+                <Route path="/profile" element={<PrivateRoute authed={authed} />}>
 
                 <Route 
-                   path=":chatId" 
-                    element={
-                      <Chat messages={messages} addMessage={handleAddMessage} />
-                      } 
-                     /> 
+                path="" 
+                element={<ConnectedProfile onLogout={unauthorize} />} />
+                </Route>
+                <Route path="/articles" element={<Articles />} />     
+                <Route path="chats" element={<ChatList />}>
+                <Route path=":chatId" element={<Chat />} /> 
                 </Route>
                 <Route path="*" element={<h4>404</h4>} />
             </Routes>

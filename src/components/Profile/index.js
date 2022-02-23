@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { connect, useDispatch, useSelector, shallowEqual } from "react-redux";
+import { logout } from '../../services/firebase';
 import { changeShowName, CHANGE_NAME, changeName } from "../../store/profile/actions";
 import { ThemeContext } from '../../utils/ThemeContext';
 import { Form } from '../Form';
@@ -9,14 +10,10 @@ export const Profile = () => {
     const { setMessageColor } = useContext(ThemeContext);
     
     const dispatch = useDispatch();
-    //const { showName, name } = useSelector((state) => state);
     const showName = useSelector(selectShowName, shallowEqual);
     const name = useSelector(selectName);
 
-    // const prevShowName = usePrev(showName);
-
-    // console.log(prevShowName, showName);
-
+    
    
     const handleChangeShowName = () => {
         dispatch(changeShowName);
@@ -48,11 +45,10 @@ export const Profile = () => {
    );
 };
 
-export const ProfileToConnect = ({ showName, name, setName, serShowName }) => {
+export const ProfileToConnect = ({ showName, name, setName, setShowName, onLogout }) => {
     const { setMessageColor } = useContext(ThemeContext);
 
     const handleChangeShowName = () => {
-        //dispatch(changeShowName);
         setShowName();
     };  
 
@@ -61,13 +57,24 @@ export const ProfileToConnect = ({ showName, name, setName, serShowName }) => {
     };
 
     const handleChangeName = (text) => {
-        //dispatch(changeName(text));
         setName(text);
     };
+
+   const handleLogout = async () => {
+       try {
+         await logout();
+       } catch (e) {
+           console.warn(e);
+       }
+   }
+
 
    return (
        <>
          <h3>Profile</h3>
+         <div>
+         <button onClick={handleLogout}>LOGOUT</button>
+         </div>
          <div>
          <button onClick={handleClick}>Change theme</button>
          </div>

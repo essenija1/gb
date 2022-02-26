@@ -17,9 +17,7 @@ const Home = () => <h2>Home page</h2>;
 export const Router = () => {
     const [messageColor, setMessageColor] = useState('red');
     const [authed, setAuthed] = useState(false);
-    const authorize = () => {
-        setAuthed(true);
-    };
+   
     const unauthorize = () => {
         setAuthed(false);
     };

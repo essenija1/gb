@@ -1,4 +1,6 @@
+import { remove } from "firebase/database";
 import { useParams } from "react-router";
+import { getMessageRefById } from "../../services/firebase";
 import { deleteMessage } from "../../store/message/actions";
 import { Message } from "../Message";
 
@@ -8,9 +10,15 @@ export const MessageList = ({ messages }) => {
     const handleDelete = (id) => {
       dispatch(deleteMessage(chatId, id));
     };
+
+    const handleDelete = (id) => {
+       // dispatch(editMessage(chatId, id));
+       remove(getMessageRefById(chatId, id));
+    };
+
     const handleEdit = (id) => {
         dispatch(editMessage(chatId, id, "edited"));
-    }  
+    }; 
    return messages.map((message) => (
         <div key={message.id}> 
         <Message text={message.text} author={message.author} />

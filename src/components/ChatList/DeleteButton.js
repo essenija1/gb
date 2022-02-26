@@ -5,8 +5,11 @@ import { deleteChat } from "../../store/chats/actions";
 
 export const DeleteButton = ({ id }) => {
     const dispatch = useDispatch();
+    
     const handleDeleteChat = () => {
-        dispatch(deleteChat(id));
+       // dispatch(deleteChat(id));
+       //set(getChatsRefById(id), null);
+       remove(getChatsRefById(id));
     };
 
 

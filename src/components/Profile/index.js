@@ -1,17 +1,31 @@
-import { useContext } from 'react';
+import { onValue, set } from 'firebase/database';
+import { useContext, useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector, shallowEqual } from "react-redux";
-import { logout } from '../../services/firebase';
-import { changeShowName, CHANGE_NAME, changeName } from "../../store/profile/actions";
+import { 
+    auth,
+    logout,
+    getProfileNameRef,
+    profileRef,
+    profileShowNameRef 
+} from '../../services/firebase';
+import { 
+    changeShowName, 
+    CHANGE_NAME, 
+    changeName 
+} from "../../store/profile/actions";
+import { selectName, selectShowName } from "../../store/profile/selectors";
 import { ThemeContext } from '../../utils/ThemeContext';
 import { Form } from '../Form';
 import { selectName } from '../store/profile/selectors';
 
 export const Profile = () => {
     const { setMessageColor } = useContext(ThemeContext);
-    
-    const dispatch = useDispatch();
-    const showName = useSelector(selectShowName, shallowEqual);
-    const name = useSelector(selectName);
+    const [name, setName] = useState("");
+    const [showNamw, setShowName] = useState(false);
+
+    // const dispatch = useDispatch();
+    // const showName = useSelector(selectShowName, shallowEqual);
+    // const name = useSelector(selectName);
 
     
    
@@ -22,12 +36,14 @@ export const Profile = () => {
         setMessageColor(prevColor => (prevColor === 'red' ? 'yellow' : 'red'));
     };
     const handleChangeName = (text) => {
-        dispatch(changeName(text));
+        //dispatch(changeName(text));
+        console.log(auth.currentUser());
+        //set(getProfileNameRef(auth.currentUser()), text);
     },
 
-    const prevShowName = usePrev(showName);
+    //const prevShowName = usePrev(showName);
 
-    console.log(prevShowName, showName);
+    //console.log(prevShowName, showName);
 
    return (
        <>
@@ -45,11 +61,13 @@ export const Profile = () => {
    );
 };
 
-export const ProfileToConnect = ({ showName, name, setName, setShowName, onLogout }) => {
+export const ProfileToConnect = () => {
     const { setMessageColor } = useContext(ThemeContext);
+    const [showName, setShowName] = useState(false);
+
 
     const handleChangeShowName = () => {
-        setShowName();
+        set(profileShowNameRef, !showName);
     };  
 
     const handleClick = () => {
@@ -57,8 +75,26 @@ export const ProfileToConnect = ({ showName, name, setName, setShowName, onLogou
     };
 
     const handleChangeName = (text) => {
-        setName(text);
+        //setName(text);
+        //set('profileNameRef', text);
+        console.log(auth.currentUser);
+        set(getProfileNameRef(auth.currentUser.uid), text);
     };
+
+    // useEffect(() => {
+    //      const unsubscribeName = onValue(profileNameRef, (snapshot) => {
+    //         setName(snapshot.val());
+    //      });
+    //      const unsubscribeShowName = onValue(profileShowNameRef, (snapshot) => {
+    //         setShowName(snapshot.val());
+    //      });
+
+    //      return () => {
+    //         unsubscribeName();
+    //         unsubscribeShowName();
+    //        // unsubscribeProfile();
+    //      }
+    // }, []);
 
    const handleLogout = async () => {
        try {
@@ -79,7 +115,7 @@ export const ProfileToConnect = ({ showName, name, setName, setShowName, onLogou
          <button onClick={handleClick}>Change theme</button>
          </div>
          <div>
-             {showName && <span>{name}</span>}
+             {showName && <h4>{name}</h4>}
              <input type="checkbox" />
          <button onClick={handleChangeShowName}>Change show name</button>
          </div>

@@ -18,6 +18,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const persistConfig = {
     key: 'Messenger',
     storage,
+    // backlist: ['chat']
+    // whithList: ['profile']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

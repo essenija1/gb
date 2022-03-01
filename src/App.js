@@ -3,11 +3,12 @@ import { Router } from "./components/Router";
 import { store } from "./store";
 
 const App = () => (
-<Provider store={store}>
-    <PersistGate persistor={persistor}>
-    <Router />
-    </PersistGate>
-</Provider>
+    <Parent />
+//<Provider store={store}>
+  //  <PersistGate persistor={persistor}>
+  //  <Router />
+  //  </PersistGate>
+// </Provider> 
 );
 
 

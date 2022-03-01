@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import "./styles.css";
 import { ThemeContext } from '../../utils/ThemeContext';
 
 export const Message = ({ text, author }) => {
-    const { messageColor } = useContext(ThemeContext);
+    //const { messageColor } = useContext(ThemeContext);
     return (
         <div>
             <span style={{ color: messageColor }}>
@@ -15,10 +15,10 @@ export const Message = ({ text, author }) => {
 };
 
 
-Message.propTypes = {
-    text: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.number]),
-    author: PropTypes.string.isRequired,
-}
+// Message.propTypes = {
+//     text: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.number]),
+//     author: PropTypes.string.isRequired,
+// }
 
 // export class Message extends React.Component {
 //     render() {

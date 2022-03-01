@@ -34,3 +34,34 @@ export const Button = (props) => {
     );
 };
 
+export const Child1 = React.memo(({ count }) => {
+   console.log('Child11111');
+   return <h4>{count}</h4>
+});
+
+export const Child2 = React.memo(({ onClick }) => {
+  console.log('Child22222');
+  return <button onClick={onClick}>CLICK</button>
+});
+
+export const Child3 = React.memo(() => {
+    console.log('Child33333');
+    return <span>Subtitle</span>
+});
+
+
+export const Parent = () => {
+    const [count, setCount] = useState(0);
+
+    const increase = useCallback(() => {
+        setCount(prev => prev + 1);
+    }, []);
+
+    return (
+        <>
+           <Child1 count={count} />
+            <Child2 count={increase} />
+           <Child3 />
+        </>
+    )
+};

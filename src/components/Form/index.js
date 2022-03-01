@@ -26,7 +26,7 @@ export const Form = ({ onSubmit }) => {
       value={value} 
       ref={textField}
       onChange={handleChange} 
-      type="text" 
+      //type="text" 
       />
       <input type="submit" />
     </form>
